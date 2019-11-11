@@ -1,19 +1,26 @@
-%%%  plot the normalized transmission ratio r? against the normalized
-%%%  acceleration a*
+%%% the step response of the system is critically damped ( inject a “step” disturbance 0.12Nm into the closed-loop system ).
+%%% use the built-in ODE45 function to do the numerical integration. The
+%%% initial state of theta is [0;0]
 
 clear all;
-clc;
-close all;
+clc;close all;
 
-k = 1;
+% disturbance tortque
+t_dist = 0.12;
 
-r_norm = 0:0.01:5;
+% solve ode
+[t,x] = ode45(@(t,x)dynamics(t,x,t_dist),[0 20],[0;0]);
 
-a_norm = a_cal(r_norm,1);
-plot(r_norm,a_norm,'Linewidth',2);
-xlabel('r_{norm}');
-ylabel('a_{norm}');
+theta = x(:,1);
+thetad = x(:,2);
+plot(t,theta,t,thetad,'Linewidth',2);
+hold on;
+
+% steady state
+plot(t,theta(end)*t./t,'-.','Linewidth',2);
+
+xlabel('t / [s]','Fontname','Times New roman','Fontsize',12);
+legend('\theta','\theta_d','Steady Error','Orientation','horizontal','Fontsize',12,...
+       'Fontname', 'Times New Roman');
 grid on;
-
-
-
+hold off;
