@@ -1,28 +1,22 @@
-%%% 1(d): using linear polynomial with parabolic to generate a trajectory from 20 degrees
-%%% to 60 degrees in 3 secs
+%%%  plot the normalized transmission ratio r* against the normalized
+%%%  acceleration a* with different Mnew = kM
 
 clear all;
-clc;close all;
+clc;
+close all;
 
-% initial position
-theta_i = 20;
+h = 1;
 
-% final position
-theta_f = 60;
+r_norm = 0:0.01:5;
 
-% time span
-t_f = 3;
+a_norm0 = a_cal(r_norm,1);
+a_norm1 = a_cal(r_norm,1.25);
+a_norm2 = a_cal(r_norm,1.5);
+a_norm3 = a_cal(r_norm,1.75);
+plot(r_norm,a_norm0,r_norm,a_norm1,r_norm,a_norm2,r_norm,a_norm3,'Linewidth',2);
+legend('k = 1','k = 1.25','k = 1.5','k = 1.75','Orientation','horizontal',...
+    'Fontname','Times New Roman','Fontsize',12);
 
-%% trajectory generation
-[t,pos,vel,accel] = linear_tragenerate(theta_i,theta_f,t_f,18);
-
-%% plot
-figure(1);
-plot(t,pos);
-grid on;
-figure(2);
-plot(t,vel);
-grid on;
-figure(3);
-plot(t,accel);
+xlabel('r_{norm}');
+ylabel('a_{norm}');
 grid on;
