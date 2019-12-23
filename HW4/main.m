@@ -1,47 +1,19 @@
-%%% compute the required torque for desired motion
+%%% Simulation 
+
 clear all;
 clc;
 close all;
+%% initial state (x-->[q1;q2;q1d;q2d])
+x0 = [deg2rad(0); 0; deg2rad(0); 5]; 
 
 %% simulation time
-t_span = [0 5];
+t_span = [0 10];
 
-%% desired motion
-[t,x] = desired_motion(t_span);
+%% set the system parameters
+P = set_Params();
 
-%% dynamics
-i = 1;
-tau = [];
-for n = 1:length(t)
-    xc = x(:,i);
-    [M,C,G] = EoM(t,xc,model);
-    tau(:,i) = M*x(5:6,i)+C*x(3:4,i)+G;
-    i = i+1;
-end
+%% run simulation
+[t,q1,q1d,q1dd,qs2] = Run_simulation(t_span,P,x0);
 
-figure(1);
-subplot(2,1,1);
-plot(t,x(1,:),'linewidth',2);
-title('\theta_1','Fontname','Times New Roman',...
-    'Fontsize',12);
-xlabel('t / [s]');
-grid on;
-subplot(2,1,2);
-plot(t,x(2,:),'linewidth',2);
-grid on;
-title('d_2');
-xlabel('t / [s]');
-
-figure(2);
-subplot(2,1,1);
-plot(t,tau(1,:),'linewidth',2);
-title('\tau_1 (without gravity)','Fontname','Times New Roman',...
-    'Fontsize',12);
-grid on;
-xlabel('t / [s]');
-subplot(2,1,2);
-plot(t,tau(2,:),'linewidth',2);
-title('\tau_2 (without gravity)','Fontname','Times New Roman',...
-    'Fontsize',12);
-xlabel('t / [s]');
-grid on;
+%% plot
+show_plot(t,q1,q1d,q1dd,qs2);
