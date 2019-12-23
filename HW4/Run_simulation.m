@@ -31,12 +31,11 @@ for i=1:length(t)-1
     c11 = C(1,1);
     c12 = C(1,2);
     % Acceleration
-    q1dd(k) = -1/m11*(m12*qs2(3,k)+c11*q1d(k)+c12*qs2(2,k));
+    q1dd(k) = -1/m11*(m12*qs2(3,k)+(c11+10)*q1d(k)+c12*qs2(2,k));
     % Velocity
     q1d(k+1) = q1d(k)+ q1dd(k)*dt;
     % Position
     q1(k+1) = q1(k) + q1d(k) * dt + 0.5*q1dd(k)*dt*dt;
-    
     % update x
     k = k + 1;
     qs2(:,k) = q2_desired(t(k));
